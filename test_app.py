@@ -6,5 +6,5 @@ def test_index_route():
     response = client.get('/')
     assert response.status_code == 200
     assert b'CI/CD' in response.data
-    assert b'学号' in response.data
-    assert b'姓名' in response.data
+    assert '学号'.encode('utf-8') in response.data
+    assert '姓名'.encode('utf-8') in response.data
