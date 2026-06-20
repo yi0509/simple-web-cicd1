@@ -33,6 +33,13 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: ${{ secrets.SSH_PORT }}
         script: |
+          mkdir -p /etc/docker
+          cat > /etc/docker/daemon.json << 'EOF'
+          {"registry-mirrors": ["https://docker.1ms.run"]}
+          EOF
+          systemctl daemon-reload
+          systemctl restart docker
+          sleep 5
           cd /opt
           rm -rf simple-web-cicd1
           git clone https://github.com/yi0509/simple-web-cicd1.git
