@@ -26,13 +26,13 @@ jobs:
       run: pytest test_app.py -v
       
     - name: 构建 Docker 镜像
-      run: docker build -t ${{ secrets.ALIYUN_IMAGE }}:${{ github.sha }} .
+      run: docker build -t crpi-heewbtjp6mdcsq3.cn-guangzhou.personal.cr.aliyuncs.com/simple-web-cicd1:${{ github.sha }} .
       
     - name: 登录阿里云容器镜像服务
-      run: echo ${{ secrets.ALIYUN_PASSWORD }} | docker login --username=${{ secrets.ALIYUN_USERNAME }} --password-stdin ${{ secrets.ALIYUN_REGISTRY }}
+      run: echo ${{ secrets.ALIYUN_PASSWORD }} | docker login --username=${{ secrets.ALIYUN_USERNAME }} --password-stdin crpi-heewbtjp6mdcsq3.cn-guangzhou.personal.cr.aliyuncs.com
         
     - name: 推送镜像到阿里云容器镜像服务
-      run: docker push ${{ secrets.ALIYUN_IMAGE }}:${{ github.sha }}
+      run: docker push crpi-heewbtjp6mdcsq3.cn-guangzhou.personal.cr.aliyuncs.com/simple-web-cicd1:${{ github.sha }}
       
     - name: 部署到 ECS
       uses: appleboy/ssh-action@v1.0.3
@@ -42,9 +42,9 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: ${{ secrets.SSH_PORT }}
         script: |
-          docker login -u ${{ secrets.ALIYUN_USERNAME }} -p ${{ secrets.ALIYUN_PASSWORD }} ${{ secrets.ALIYUN_REGISTRY }}
-          docker pull ${{ secrets.ALIYUN_IMAGE }}:${{ github.sha }}
+          docker login -u ${{ secrets.ALIYUN_USERNAME }} -p ${{ secrets.ALIYUN_PASSWORD }} crpi-heewbtjp6mdcsq3.cn-guangzhou.personal.cr.aliyuncs.com
+          docker pull crpi-heewbtjp6mdcsq3.cn-guangzhou.personal.cr.aliyuncs.com/simple-web-cicd1:${{ github.sha }}
           docker stop simple-web-cicd1 || true
           docker rm simple-web-cicd1 || true
-          docker run -d --name simple-web-cicd1 -p 80:80 ${{ secrets.ALIYUN_IMAGE }}:${{ github.sha }}
+          docker run -d --name simple-web-cicd1 -p 80:80 crpi-heewbtjp6mdcsq3.cn-guangzhou.personal.cr.aliyuncs.com/simple-web-cicd1:${{ github.sha }}
           docker logout
