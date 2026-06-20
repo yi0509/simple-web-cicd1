@@ -30,8 +30,8 @@ jobs:
       
     - name: 导出镜像为 tar 文件
       run: |
-        docker save -o /tmp/simple-web-cicd1.tar simple-web-cicd1:${{ github.sha }}
-        chmod 644 /tmp/simple-web-cicd1.tar
+        docker save -o simple-web-cicd1.tar simple-web-cicd1:${{ github.sha }}
+        ls -la simple-web-cicd1.tar
       
     - name: 传输镜像到 ECS
       uses: appleboy/scp-action@v0.1.7
@@ -40,7 +40,7 @@ jobs:
         username: ${{ secrets.SSH_USERNAME }}
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: ${{ secrets.SSH_PORT }}
-        source: /tmp/simple-web-cicd1.tar
+        source: simple-web-cicd1.tar
         target: /tmp/
         
     - name: 部署到 ECS
