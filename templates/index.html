@@ -28,24 +28,50 @@
             width: 100%;
             text-align: center;
             animation: fadeIn 0.5s ease-in-out;
+            position: relative;
+            overflow: hidden;
+        }
+        .container::before {
+            content: 'v2.0';
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            font-size: 120px;
+            color: rgba(118, 75, 162, 0.05);
+            font-weight: bold;
         }
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
         .rocket-icon {
-            font-size: 64px;
+            font-size: 72px;
             margin-bottom: 20px;
+            animation: bounce 2s infinite;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
         }
         h1 {
             color: #333;
-            font-size: 28px;
+            font-size: 32px;
             margin-bottom: 10px;
         }
         .subtitle {
             color: #666;
             font-size: 16px;
             margin-bottom: 30px;
+        }
+        .version-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 15px;
         }
         .status-badge {
             display: inline-flex;
@@ -86,6 +112,32 @@
             font-weight: 600;
             font-family: 'Courier New', monospace;
         }
+        .features {
+            margin-top: 20px;
+            text-align: left;
+        }
+        .features h3 {
+            color: #333;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        .features ul {
+            list-style: none;
+            padding: 0;
+        }
+        .features li {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 5px 0;
+            color: #666;
+            font-size: 14px;
+        }
+        .features li::before {
+            content: '✓';
+            color: #28a745;
+            font-weight: bold;
+        }
         .footer {
             margin-top: 30px;
             color: #999;
@@ -97,7 +149,8 @@
     <div class="container">
         <div class="rocket-icon">🚀</div>
         <h1>CI/CD部署成功！</h1>
-        <p class="subtitle">Flask App v1.0 | Python 3.10</p>
+        <p class="subtitle">Flask App v2.0 | Python 3.10</p>
+        <div class="version-badge">VERSION 2.0</div>
         <div class="status-badge">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
                 <circle cx="12" cy="12" r="10"></circle>
@@ -120,8 +173,17 @@
             </div>
             <div class="info-item">
                 <span class="info-label">版本</span>
-                <span class="info-value">v1.0</span>
+                <span class="info-value">v2.0</span>
             </div>
+        </div>
+        <div class="features">
+            <h3>🌟 v2.0 新功能</h3>
+            <ul>
+                <li>新增动画效果</li>
+                <li>优化页面布局</li>
+                <li>响应式设计</li>
+                <li>CI/CD自动部署</li>
+            </ul>
         </div>
         <div class="footer">
             Powered by GitHub Actions & Docker
