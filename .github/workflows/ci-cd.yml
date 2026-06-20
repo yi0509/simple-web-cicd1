@@ -25,9 +25,6 @@ jobs:
     - name: 运行测试
       run: pytest test_app.py -v
       
-    - name: 构建 Docker 镜像
-      run: docker build -t simple-web-cicd1:${{ github.sha }} .
-      
     - name: 部署到 ECS
       uses: appleboy/ssh-action@v1.0.3
       with:
@@ -36,21 +33,11 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: ${{ secrets.SSH_PORT }}
         script: |
+          cd /opt
+          rm -rf simple-web-cicd1
+          git clone https://github.com/yi0509/simple-web-cicd1.git
+          cd simple-web-cicd1
           docker stop simple-web-cicd1 || true
           docker rm simple-web-cicd1 || true
-      
-    - name: 传输并加载镜像到 ECS
-      run: |
-        docker save simple-web-cicd1:${{ github.sha }} | ssh -o StrictHostKeyChecking=no -i /dev/stdin ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} -p ${{ secrets.SSH_PORT }} "docker load"
-      env:
-        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-        
-    - name: 启动容器
-      uses: appleboy/ssh-action@v1.0.3
-      with:
-        host: ${{ secrets.SSH_HOST }}
-        username: ${{ secrets.SSH_USERNAME }}
-        key: ${{ secrets.SSH_PRIVATE_KEY }}
-        port: ${{ secrets.SSH_PORT }}
-        script: |
-          docker run -d --name simple-web-cicd1 -p 80:80 simple-web-cicd1:${{ github.sha }}
+          docker build -t simple-web-cicd1:latest .
+          docker run -d --name simple-web-cicd1 -p 80:80 simple-web-cicd1:latest
